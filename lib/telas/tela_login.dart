@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'tela_menu.dart';
+import 'package:lembrebem/botoes.dart';
 
 class TelaLogin extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -134,35 +135,16 @@ class TelaLogin extends StatelessWidget {
 
                   SizedBox(height: 32),
 
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // aqui faz a confirmação q tenho todas as infos
-                        // necessárias, e depois navega pra tela de menu
-                        if (_formKey.currentState!.validate()) {
-                          telaMenu(context);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF55C2C3),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
+                  BotaoPersonalizado(
+                    texto: 'Login',
+                    cor: Color(0xFF55C2C3),
+                    onPressed: () {
+                      // aqui faz a confirmação q tenho todas as infos
+                      // necessárias, e depois navega pra tela de menu
+                      if (_formKey.currentState!.validate()) {
+                        telaMenu(context);
+                      }
+                    },
                   ),
                 ],
               ),

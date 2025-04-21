@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tela_login.dart';
 import 'tela_cadastro1.dart';
+import 'package:lembrebem/botoes.dart';
 
 class TelaInicial extends StatelessWidget {
 
@@ -51,68 +52,30 @@ class TelaInicial extends StatelessWidget {
 
                 SizedBox(height: 32),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
+                BotaoPersonalizado(
+                    texto: 'Fazer cadastro',
+                  cor: Color(0xFF55C2C3),
                     onPressed: () {
                       Navigator.push(
                         context,
-                        // aqui eu to navegando pra tela de cadastro 1
+                        // e aqui to indo pra tela de cadastro
                         MaterialPageRoute(builder: (context) => TelaCadastro1()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF55C2C3),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text(
-                        'Fazer cadastro',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
                 ),
 
                 SizedBox(height: 16),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        // e aqui to indo pra tela de login
-                        MaterialPageRoute(builder: (context) => TelaLogin()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF55C2C3),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text(
-                        'Fazer login',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
+                BotaoPersonalizado(
+                  texto: 'Fazer login',
+                  cor: Color(0xFF55C2C3),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      // e aqui to indo pra tela de login
+                      MaterialPageRoute(builder: (context) => TelaLogin()),
+                    );
+                  },
                 ),
               ],
             ),
