@@ -69,25 +69,6 @@ class TelaLogin extends StatelessWidget {
                       ),
                       filled: true,
                       fillColor: Color(0xFFF8F8F8),
-
-                      // muda a cor da borda padrão
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0xFFAFAFAF), width: 1.5),
-                      ),
-
-                      // muda a cor da borda quando é clicada
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0xFFAFAFAF), width: 2),
-                      ),
-
-                      // muda a cor da borda quando da erro (campo vazio)
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.red),
-                      ),
-
                     ),
                     // a parte de validação fica aqui
                     validator: (value) {
@@ -109,21 +90,6 @@ class TelaLogin extends StatelessWidget {
                       ),
                       filled: true,
                       fillColor: Color(0xFFF8F8F8),
-
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0xFFAFAFAF), width: 1.5),
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Color(0xFFAFAFAF), width: 2),
-                      ),
-
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.red),
-                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty){

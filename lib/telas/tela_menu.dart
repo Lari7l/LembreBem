@@ -4,15 +4,14 @@ import 'package:lembrebem/menu_rodape.dart';
 import 'tela_alarme.dart';
 
 class TelaMenu extends StatelessWidget {
-  final String emailTel;
-  final String senha;
+  final String? emailTel;
+  final String? senha;
 
   TelaMenu({
-    required this.emailTel,
-    required this.senha,
+    this.emailTel,
+    this.senha,
   });
 
-  // Função para navegar entre as telas
   void navegar(BuildContext context, String rota) {
     if (rota != '/menu') {
       Navigator.pushNamed(context, rota);
@@ -98,42 +97,17 @@ class TelaMenu extends StatelessWidget {
               ),
             ),
 
-            // Rodapé com navegação
             Container(
               color: Color(0xFFEFF9FB),
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  MenuRodape(
-                    icon: Icons.search,
-                    opcao: 'Pesquisar',
-                    selecionado: false,
-                    onTap: () {},
-                  ),
-                  MenuRodape(
-                    icon: Icons.alarm,
-                    opcao: 'Alarme',
-                    selecionado: false,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => TelaAlarme()),
-                      );
-                    },
-                  ),
-                  MenuRodape(
-                    icon: Icons.person,
-                    opcao: 'Perfil',
-                    selecionado: false,
-                    onTap: () {},
-                  ),
-                  MenuRodape(
-                    icon: Icons.home,
-                    opcao: 'Menu',
-                    selecionado: true,
-                    onTap: () {},
-                  ),
+                  MenuRodape(icon: Icons.search, opcao: 'Pesquisar', selecionado: false, onTap: () {}),
+                  MenuRodape(icon: Icons.alarm, opcao: 'Alarme', selecionado: false, onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => TelaAlarme()));}),
+                  MenuRodape(icon: Icons.person, opcao: 'Perfil', selecionado: false, onTap: () {}),
+                  MenuRodape(icon: Icons.home, opcao: 'Menu', selecionado: true, onTap: () {}),
                 ],
               ),
             ),

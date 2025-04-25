@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Nessa tela fica o menu de rodapé, deixei ela separado
-// pra ficar fácil de puxar no código
-
 class MenuRodape extends StatelessWidget {
   final IconData icon;
   final String opcao;
@@ -34,7 +31,7 @@ class MenuRodape extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(icon, color: Colors.white, size: 20),
-                  SizedBox(width: 8),
+                  SizedBox(width: 4),
                   Text(
                     opcao,
                     style: TextStyle(

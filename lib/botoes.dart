@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-// Nessa tela fica o design dos botões, deixei separado
-// pra ficar fácil de puxar no código
-
 class BotaoPersonalizado extends StatelessWidget {
   final String texto;
   final Color cor;
+  final IconData? icone;
   final VoidCallback onPressed;
 
   const BotaoPersonalizado({
     required this.texto,
     required this.cor,
+    this.icone,
     required this.onPressed,
     super.key,
   });
@@ -30,13 +29,25 @@ class BotaoPersonalizado extends StatelessWidget {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0),
-          child: Text(
-            texto,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontSize: 16,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                texto,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+
+              if (icone != null) ...[
+                SizedBox(width: 10),
+                Icon(icone, color: Colors.white),
+                SizedBox(width: 8),
+              ],
+            ],
           ),
         ),
       ),
