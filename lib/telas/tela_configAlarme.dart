@@ -7,6 +7,9 @@ import 'package:lembrebem/botoes.dart';
 import 'package:lembrebem/menu_rodape.dart';
 
 class TelaConfigAlarme extends StatefulWidget {
+  final Alarme? alarme;
+  TelaConfigAlarme({this.alarme});
+
   @override
   _TelaConfigAlarmeState createState() => _TelaConfigAlarmeState();
 }
@@ -39,11 +42,34 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.alarme != null) {
+      _medicamentoController.text = widget.alarme!.nome;
+      _observacoesController.text = widget.alarme!.observacoes;
+      _selectedTime = widget.alarme!.horario;
+
+      final intervalos = ['8 em 8h', '6 em 6h', '12 em 12h'];
+      final diasUso = ['3 dias', '7 dias', 'Uso contínuo'];
+
+      _selectedInterval =
+          intervalos.contains(widget.alarme!.intervalo)
+              ? widget.alarme!.intervalo
+              : null;
+
+      _selectedUso =
+          diasUso.contains(widget.alarme!.diasDeUso)
+              ? widget.alarme!.diasDeUso
+              : null;
+    }
+  }
+
   void _salvarAlarme() {
     Navigator.pop(
       context,
       Alarme(
-        id: '',
+        id: widget.alarme?.id ?? '',
         nome: _medicamentoController.text,
         observacoes: _observacoesController.text,
         horario: _selectedTime,
@@ -143,7 +169,7 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: DropdownButtonFormField<String>(
-                value: _selectedInterval,
+                value: _selectedInterval ?? '8 em 8h',
                 decoration: InputDecoration(border: InputBorder.none),
                 isExpanded: true,
                 items:
@@ -172,7 +198,7 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: DropdownButtonFormField<String>(
-                value: _selectedUso,
+                value: _selectedUso ?? '3 dias',
                 decoration: InputDecoration(border: InputBorder.none),
                 isExpanded: true,
                 items:

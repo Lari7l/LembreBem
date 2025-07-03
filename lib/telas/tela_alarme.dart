@@ -39,72 +39,95 @@ class _TelaAlarmeState extends State<TelaAlarme> {
   }
 
   Widget containerAlarme(modelo.Alarme alarme, int index) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Color(0xFFF8F8F8),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Color(0xFF55C2C3)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  alarme.nome,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  alarme.horario.format(context),
-                  style: TextStyle(fontSize: 24),
-                ),
-                SizedBox(height: 4),
-                Text(alarme.diasDeUso),
-                if (alarme.observacoes.isNotEmpty)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Text(
-                      alarme.observacoes,
-                      style: TextStyle(
-                        fontStyle: FontStyle.italic,
-                        color: Colors.grey[600],
+    return GestureDetector(
+      onTap: () async {
+        final alarmeEditado = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TelaConfigAlarme(alarme: alarme),
+          ),
+        );
+
+        if (alarmeEditado != null && mounted) {
+          final user = supabase.auth.currentUser;
+          if (user == null) return;
+          await modelo.atualizarAlarme(
+            id: alarme.id!,
+            nome: alarmeEditado.nome,
+            observacoes: alarmeEditado.observacoes,
+            horario: alarmeEditado.horario,
+            ativado: alarmeEditado.ativado,
+          );
+          buscarAlarmes();
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 16),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Color(0xFFF8F8F8),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Color(0xFF55C2C3)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    alarme.nome,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    alarme.horario.format(context),
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  SizedBox(height: 4),
+                  Text(alarme.diasDeUso),
+                  if (alarme.observacoes.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        alarme.observacoes,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    alarme.ativado ? Icons.toggle_on : Icons.toggle_off,
+                    color: alarme.ativado ? Color(0xFF55C2C3) : Colors.grey,
+                    size: 40,
                   ),
+                  onPressed: () async {
+                    await supabase
+                        .from('alarmes')
+                        .update({'ativo': !alarme.ativado})
+                        .eq('id', alarme.id);
+                    buscarAlarmes();
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red, size: 30),
+                  onPressed: () async {
+                    await supabase.from('alarmes').delete().eq('id', alarme.id);
+                    buscarAlarmes();
+                  },
+                ),
               ],
             ),
-          ),
-          Column(
-            children: [
-              IconButton(
-                icon: Icon(
-                  alarme.ativado ? Icons.toggle_on : Icons.toggle_off,
-                  color: alarme.ativado ? Color(0xFF55C2C3) : Colors.grey,
-                  size: 40,
-                ),
-                onPressed: () async {
-                  await supabase
-                      .from('alarmes')
-                      .update({'ativo': !alarme.ativado})
-                      .eq('id', alarme.id);
-                  buscarAlarmes();
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.delete, color: Colors.red, size: 30),
-                onPressed: () async {
-                  await supabase.from('alarmes').delete().eq('id', alarme.id);
-                  buscarAlarmes();
-                },
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

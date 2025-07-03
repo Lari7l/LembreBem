@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:lembrebem/modelo_alarme.dart' as modelo;
 
 class Alarme {
   String? id;
@@ -124,7 +125,6 @@ Future<void> verificarEInserirUsuario() async {
 
       print('Tentativa de inserir usuário: $response');
 
-      // Aguarda até o usuário realmente existir no banco
       bool usuarioCriado = false;
       int tentativas = 0;
       while (!usuarioCriado && tentativas < 5) {
@@ -144,4 +144,109 @@ Future<void> verificarEInserirUsuario() async {
       }
     }
   }
+}
+
+Future<void> atualizarAlarme({
+  required String id,
+  required String nome,
+  required String observacoes,
+  required TimeOfDay horario,
+  required bool ativado,
+}) async {
+  final supabase = Supabase.instance.client;
+  final horaAlarme =
+      "${horario.hour.toString().padLeft(2, '0')}:${horario.minute.toString().padLeft(2, '0')}:00";
+
+  final dadosAtualizados = {
+    'titulo': nome,
+    'descricao': observacoes,
+    'hora_alarme': horaAlarme,
+    'ativo': ativado,
+  };
+
+  final response =
+      await supabase
+          .from('alarmes')
+          .update(dadosAtualizados)
+          .eq('id', id)
+          .select();
+
+  print('Atualizando alarme: $dadosAtualizados');
+  print('Resposta do Supabase: $response');
+
+  if (response == null || (response is Map && response['error'] != null)) {
+    throw Exception('Erro ao atualizar alarme: $response');
+  }
+}
+
+class AlarmesPage extends StatefulWidget {
+  @override
+  _AlarmesPageState createState() => _AlarmesPageState();
+}
+
+class _AlarmesPageState extends State<AlarmesPage> {
+  String _selectedUso = 'Segunda'; // valor inicial
+  final List<String> _diasUsoList = [
+    'Segunda',
+    'Terça',
+    'Quarta',
+    'Quinta',
+    'Sexta',
+    'Sábado',
+    'Domingo',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    // if (widget.alarme != null) {
+    //   _selectedUso = widget.alarme!.diasDeUso;
+    //   // ...outros campos...
+    // } else {
+    //   _selectedUso = _diasUsoList.first;
+    // }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Alarmes')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text('Selecione o dia de uso:'),
+            DropdownButton<String>(
+              value:
+                  _diasUsoList.contains(_selectedUso)
+                      ? _selectedUso
+                      : _diasUsoList.first,
+              items:
+                  _diasUsoList.map((dia) {
+                    return DropdownMenuItem<String>(
+                      value: dia,
+                      child: Text(dia),
+                    );
+                  }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedUso = value!;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> atualizarAlarmeExemplo(Alarme alarmeEditado) async {
+  await atualizarAlarme(
+    id: alarmeEditado.id!,
+    nome: alarmeEditado.nome,
+    observacoes: alarmeEditado.observacoes,
+    horario: alarmeEditado.horario,
+    ativado: alarmeEditado.ativado,
+  );
 }

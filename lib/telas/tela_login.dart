@@ -119,7 +119,6 @@ class TelaLogin extends StatelessWidget {
                       filled: true,
                       fillColor: Color(0xFFF8F8F8),
                     ),
-                    // a parte de validação fica aqui
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Este campo é obrigatório.';
