@@ -49,15 +49,6 @@ Future<void> salvarNovoAlarme({
   required String usuarioId,
 }) async {
   final supabase = Supabase.instance.client;
-  final user = supabase.auth.currentUser;
-
-  if (user != null) {
-    await supabase.from('usuarios').insert({
-      'id': user.id,
-      'email': user.email,
-      'nome': user.email ?? '',
-    });
-  }
 
   final dataHoje = DateTime.now();
   final dataAlarme =
@@ -92,7 +83,9 @@ Future<void> criarAlarmeExemplo() async {
   TimeOfDay horarioSelecionado = TimeOfDay.now();
   String diasSelecionados = 'Segunda, Quarta, Sexta';
   String intervaloSelecionado = '10';
-  final userId = Supabase.instance.client.auth.currentUser!.id;
+  final userId = Supabase.instance.client.auth.currentUser?.id;
+
+  await verificarEInserirUsuario();
 
   await salvarNovoAlarme(
     nome: nome,
@@ -101,6 +94,54 @@ Future<void> criarAlarmeExemplo() async {
     diasDeUso: diasSelecionados,
     ativado: true,
     intervalo: intervaloSelecionado,
-    usuarioId: userId,
+    usuarioId: userId!,
   );
+}
+
+Future<void> verificarEInserirUsuario() async {
+  final supabase = Supabase.instance.client;
+  final user = supabase.auth.currentUser;
+
+  if (user != null) {
+    final existe =
+        await supabase
+            .from('usuarios')
+            .select()
+            .eq('id', user.id)
+            .maybeSingle();
+
+    print('Usuário existe na tabela usuarios? $existe');
+
+    if (existe == null) {
+      final response =
+          await supabase.from('usuarios').insert({
+            'id': user.id,
+            'email': user.email,
+            'nome': user.email ?? '',
+            'cpf': '00000000000',
+            'data_nascimento': null,
+          }).select();
+
+      print('Tentativa de inserir usuário: $response');
+
+      // Aguarda até o usuário realmente existir no banco
+      bool usuarioCriado = false;
+      int tentativas = 0;
+      while (!usuarioCriado && tentativas < 5) {
+        await Future.delayed(Duration(milliseconds: 300));
+        final existeAgora =
+            await supabase
+                .from('usuarios')
+                .select()
+                .eq('id', user.id)
+                .maybeSingle();
+        print('Tentativa $tentativas - Usuário existe agora? $existeAgora');
+        if (existeAgora != null) usuarioCriado = true;
+        tentativas++;
+      }
+      if (!usuarioCriado) {
+        throw Exception('Usuário não foi criado na tabela usuarios!');
+      }
+    }
+  }
 }
