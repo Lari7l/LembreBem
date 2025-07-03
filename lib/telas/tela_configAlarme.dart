@@ -43,11 +43,13 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
     Navigator.pop(
       context,
       Alarme(
+        id: '',
         nome: _medicamentoController.text,
-        horario: _selectedTime,
-        intervalo: _selectedInterval ?? '',
-        diasDeUso: _selectedUso ?? '',
         observacoes: _observacoesController.text,
+        horario: _selectedTime,
+        diasDeUso: _selectedUso ?? '',
+        ativado: true,
+        intervalo: _selectedInterval ?? '',
       ),
     );
   }
@@ -63,10 +65,7 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
           icon: Icon(Icons.arrow_back_ios_new, color: Color(0xFF55C2C3)),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          'Adicionar alarme',
-          style: TextStyle(color: Colors.black),
-        ),
+        title: Text('Adicionar alarme', style: TextStyle(color: Colors.black)),
         centerTitle: true,
       ),
 
@@ -76,7 +75,12 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
           crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            Center(child: Text('Horário da medicação', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+            Center(
+              child: Text(
+                'Horário da medicação',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
             SizedBox(height: 12),
             GestureDetector(
               onTap: () => _selectTime(context),
@@ -95,10 +99,7 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
                         style: TextStyle(fontSize: 36),
                       ),
                       SizedBox(width: 8),
-                      Text(
-                        ':',
-                        style: TextStyle(fontSize: 36),
-                      ),
+                      Text(':', style: TextStyle(fontSize: 36)),
                       SizedBox(width: 8),
                       Text(
                         _selectedTime.minute.toString().padLeft(2, '0'),
@@ -112,7 +113,10 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
 
             SizedBox(height: 20),
 
-            Text('Nome do Medicamento', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'Nome do Medicamento',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 8),
             TextField(
               controller: _medicamentoController,
@@ -127,7 +131,10 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
 
             SizedBox(height: 20),
 
-            Text('Intervalos', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'Intervalos',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 8),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12),
@@ -139,19 +146,24 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
                 value: _selectedInterval,
                 decoration: InputDecoration(border: InputBorder.none),
                 isExpanded: true,
-                items: ['8 em 8h', '6 em 6h', '12 em 12h'].map((value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) => setState(() => _selectedInterval = newValue),
+                items:
+                    ['8 em 8h', '6 em 6h', '12 em 12h'].map((value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                onChanged:
+                    (newValue) => setState(() => _selectedInterval = newValue),
               ),
             ),
 
             SizedBox(height: 20),
 
-            Text('Dias de uso', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'Dias de uso',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 8),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12),
@@ -163,19 +175,24 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
                 value: _selectedUso,
                 decoration: InputDecoration(border: InputBorder.none),
                 isExpanded: true,
-                items: ['3 dias', '7 dias', 'Uso contínuo'].map((value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (newValue) => setState(() => _selectedUso = newValue),
+                items:
+                    ['3 dias', '7 dias', 'Uso contínuo'].map((value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                onChanged:
+                    (newValue) => setState(() => _selectedUso = newValue),
               ),
             ),
 
             SizedBox(height: 20),
 
-            Text('Observações', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'Observações',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 8),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12),
@@ -186,7 +203,8 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
               child: TextField(
                 controller: _observacoesController,
                 decoration: InputDecoration(
-                  hintText: 'Digite orientações importantes para o uso correto do medicamento...',
+                  hintText:
+                      'Digite orientações importantes para o uso correto do medicamento...',
                   border: InputBorder.none,
                 ),
                 maxLines: 4,
@@ -212,14 +230,40 @@ class _TelaConfigAlarmeState extends State<TelaConfigAlarme> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            MenuRodape(icon: Icons.search, opcao: 'Pesquisar', selecionado: false, onTap: () {}),
-            MenuRodape(icon: Icons.alarm, opcao: 'Alarme', selecionado: true, onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => TelaAlarme()));
-            }),
-            MenuRodape(icon: Icons.person, opcao: 'Perfil', selecionado: false, onTap: () {}),
-            MenuRodape(icon: Icons.home, opcao: 'Menu', selecionado: false, onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => TelaMenu()));
-            }),
+            MenuRodape(
+              icon: Icons.search,
+              opcao: 'Pesquisar',
+              selecionado: false,
+              onTap: () {},
+            ),
+            MenuRodape(
+              icon: Icons.alarm,
+              opcao: 'Alarme',
+              selecionado: true,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => TelaAlarme()),
+                );
+              },
+            ),
+            MenuRodape(
+              icon: Icons.person,
+              opcao: 'Perfil',
+              selecionado: false,
+              onTap: () {},
+            ),
+            MenuRodape(
+              icon: Icons.home,
+              opcao: 'Menu',
+              selecionado: false,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => TelaMenu()),
+                );
+              },
+            ),
           ],
         ),
       ),

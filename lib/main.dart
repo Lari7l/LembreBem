@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'telas/tela_inicial.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:lembrebem/telas/tela_login.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Supabase.initialize(
+    url: 'https://gvkwpxllzerjbvlrdacv.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2a3dweGxsemVyamJ2bHJkYWN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwMzUyOTgsImV4cCI6MjA2NjYxMTI5OH0.phmMY-ToZZ8Mq965SBon7OCX7zASYxYQYUdZQyRp9HI',
+  );
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'LembreBem',
-      theme: ThemeData(
-        primarySwatch: Colors.teal,
-      ),
-      home: TelaInicial(),
-    );
+    return MaterialApp(title: 'LembreBem', home: TelaLogin());
   }
 }
